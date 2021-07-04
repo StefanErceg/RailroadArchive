@@ -8,7 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 import org.unibl.etf.mdp.railroad.archive.Archive;
 import org.unibl.etf.mdp.railroad.archive.ArchiveInterface;
 
-public class Main {
+public class ArchiveServer {
 	
 	public static final String DIRECTORY =  System.getProperty("user.home") + File.separator + "Railroad" + File.separator + "Archive";
 	
