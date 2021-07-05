@@ -8,8 +8,10 @@ import java.nio.file.Files;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
 
 import org.json.JSONObject;
+import org.unibl.etf.mdp.railroad.ArchiveServer;
 import org.unibl.etf.mdp.railroad.model.Meta;
 import org.unibl.etf.mdp.railroad.model.Report;
 
@@ -25,6 +27,7 @@ public class Archive implements ArchiveInterface {
 		try {
 		output.createNewFile();
 		} catch(Exception e) {
+			ArchiveServer.errorLog.getLogger().log(Level.SEVERE, e.fillInStackTrace().toString());
 			return false;
 		}
 		try (FileOutputStream dataStream = new FileOutputStream(output); FileOutputStream metaStream = new FileOutputStream(new File(output.getAbsolutePath() + "-meta.json"))) {
@@ -33,7 +36,7 @@ public class Archive implements ArchiveInterface {
 		    metaStream.write(new JSONObject(meta).toString().getBytes());
 		    return true;
 		} catch (IOException e) {
-			e.printStackTrace();
+			ArchiveServer.errorLog.getLogger().log(Level.SEVERE, e.fillInStackTrace().toString());
 		}
 		return false;
 	}
@@ -57,7 +60,7 @@ public class Archive implements ArchiveInterface {
 				Meta meta = gson.fromJson(new JSONObject(new String(fileBytes)).toString(), Meta.class);
 				metaData.add(meta);
 			} catch (IOException e) {
-				e.printStackTrace();
+				ArchiveServer.errorLog.getLogger().log(Level.SEVERE, e.fillInStackTrace().toString());
 			}
 		} 
 		return metaData;
@@ -72,7 +75,7 @@ public class Archive implements ArchiveInterface {
 			byte[] data = Files.readAllBytes(file.toPath());
 			return new Report(data, meta);
 		} catch (IOException e) {
-			e.printStackTrace();
+			ArchiveServer.errorLog.getLogger().log(Level.SEVERE, e.fillInStackTrace().toString());
 		}
 		return null;
 		
